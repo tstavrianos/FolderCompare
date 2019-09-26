@@ -2,6 +2,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderCompare", "FolderCompare\FolderCompare.csproj", "{99085BEB-7457-4372-849E-A296DFB799AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateDatabaseFile", "GenerateDatabaseFile\GenerateDatabaseFile.csproj", "{C03FC89F-AAD5-4330-BD37-BB3901239755}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckAgainstDatabaseFile", "CheckAgainstDatabaseFile\CheckAgainstDatabaseFile.csproj", "{D5F4C53A-C601-4A23-9604-44FB31129A58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFFolderBrowser", "WPFFolderBrowser\WPFFolderBrowser.csproj", "{35E2F147-93EF-496B-B6B8-F716D62FD676}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|x64 = Release|x64
@@ -12,5 +18,17 @@ Global
 		{99085BEB-7457-4372-849E-A296DFB799AF}.Release|x64.Build.0 = Release|x64
 		{99085BEB-7457-4372-849E-A296DFB799AF}.Debug|x64.ActiveCfg = Debug|x64
 		{99085BEB-7457-4372-849E-A296DFB799AF}.Debug|x64.Build.0 = Debug|x64
+		{C03FC89F-AAD5-4330-BD37-BB3901239755}.Release|x64.ActiveCfg = Release|Any CPU
+		{C03FC89F-AAD5-4330-BD37-BB3901239755}.Release|x64.Build.0 = Release|Any CPU
+		{C03FC89F-AAD5-4330-BD37-BB3901239755}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C03FC89F-AAD5-4330-BD37-BB3901239755}.Debug|x64.Build.0 = Debug|Any CPU
+		{D5F4C53A-C601-4A23-9604-44FB31129A58}.Release|x64.ActiveCfg = Release|Any CPU
+		{D5F4C53A-C601-4A23-9604-44FB31129A58}.Release|x64.Build.0 = Release|Any CPU
+		{D5F4C53A-C601-4A23-9604-44FB31129A58}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D5F4C53A-C601-4A23-9604-44FB31129A58}.Debug|x64.Build.0 = Debug|Any CPU
+		{35E2F147-93EF-496B-B6B8-F716D62FD676}.Release|x64.ActiveCfg = Release|Any CPU
+		{35E2F147-93EF-496B-B6B8-F716D62FD676}.Release|x64.Build.0 = Release|Any CPU
+		{35E2F147-93EF-496B-B6B8-F716D62FD676}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{35E2F147-93EF-496B-B6B8-F716D62FD676}.Debug|x64.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal
