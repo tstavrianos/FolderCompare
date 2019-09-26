@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:GenerateDatabaseFile"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="MainWindow" Height="140" Width="525">
-    <Grid Margin="10">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="MainWindow" Width="525" SizeToContent="Height">
+    <Grid Margin="10" Height="Auto">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="100"/>
@@ -18,12 +19,13 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        
-        <TextBlock Grid.Column="0" Grid.Row="0">Selected folder</TextBlock>
-        <Button Grid.Column="1" Grid.Row="0" Margin="5">Browse</Button>
-        <TextBlock Grid.Column="0" Grid.Row="1">Output file</TextBlock>
-        <Button Grid.Column="1" Grid.Row="1" Margin="5">Browse</Button>
-        <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Include hash of detected files</CheckBox>
-        <Button Grid.Column="1" Grid.Row="3" Margin="5">Generate</Button>
+
+        <TextBlock Grid.Column="0" Grid.Row="0" Name="SelectedFolder" Text="Select a folder to check" Height="Auto"/>
+        <Button Grid.Column="1" Grid.Row="0" Margin="5" Click="BrowseFolderCommand"  Height="Auto" IsEnabled="{Binding Path=ControlsEnabled}">Browse</Button>
+        <TextBlock Grid.Column="0" Grid.Row="1" Name="SelectedFile" Text="Local database file"  Height="Auto"/>
+        <Button Grid.Column="1" Grid.Row="1" Margin="5" Click="BrowseFileCommand"  Height="Auto" IsEnabled="{Binding Path=ControlsEnabled}">Browse</Button>
+        <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Height="Auto" IsEnabled="{Binding Path=ControlsEnabled}" IsChecked="{Binding Path=HashFiles}">Include hash of detected files</CheckBox>
+        <Button Grid.Column="1" Grid.Row="3" Margin="5" Click="GenerateCommand"  Height="Auto" IsEnabled="{Binding Path=ControlsEnabled}">Generate</Button>
+        <Label Content="{Binding Path=FilesFound}" Grid.Row="3" Grid.Column="0"/>
     </Grid>
 </Window>

@@ -29,13 +29,13 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
         
-            <TextBlock Grid.Column="0" Grid.Row="0" Name="SelectedFolder" Text="Selected a folder to check"/>
-            <Button Grid.Column="1" Grid.Row="0" Margin="5" Click="BrowseFolder">Browse</Button>
-            <TextBlock Grid.Column="0" Grid.Row="1" Name="SelectedFile" Text="Selected a saved database file"/>
-            <Button Grid.Column="1" Grid.Row="1" Margin="5" Click="BrowseFile">Browse</Button>
-            <CheckBox Grid.Column="0" Grid.Row="2">by Content(if included in input file)</CheckBox>
-            <CheckBox Grid.Column="0" Grid.Row="3">ignore date</CheckBox>
-            <Button Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Margin="5" VerticalAlignment="Center">Compare</Button>
+            <TextBlock Grid.Column="0" Grid.Row="0" Name="SelectedFolder" Text="Select a folder to check" IsEnabled="{Binding Path=ControlsEnabled}"/>
+            <Button Grid.Column="1" Grid.Row="0" Margin="5" Click="BrowseFolder" IsEnabled="{Binding Path=ControlsEnabled}">Browse</Button>
+            <TextBlock Grid.Column="0" Grid.Row="1" Name="SelectedFile" Text="Selected a saved database file" IsEnabled="{Binding Path=ControlsEnabled}"/>
+            <Button Grid.Column="1" Grid.Row="1" Margin="5" Click="BrowseFile" IsEnabled="{Binding Path=ControlsEnabled}">Browse</Button>
+            <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding HashFiles}" IsEnabled="{Binding Path=ControlsEnabled}">by content(if included in input file)</CheckBox>
+            <CheckBox Grid.Column="0" Grid.Row="3" IsChecked="{Binding IgnoreDates}" IsEnabled="{Binding Path=ControlsEnabled}">ignore date</CheckBox>
+            <Button Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Margin="5" VerticalAlignment="Center" Click="Check" IsEnabled="{Binding Path=ControlsEnabled}">Compare</Button>
         </Grid>
         <Grid Grid.Column="0" Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -48,35 +48,70 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
-            <CheckBox Grid.Column="0" Grid.Row="0" Margin="2">Show missing</CheckBox>
-            <CheckBox Grid.Column="1" Grid.Row="0" Margin="2">Show correct</CheckBox>
-            <CheckBox Grid.Column="2" Grid.Row="0" Margin="2">Show incorrect</CheckBox>
-            <CheckBox Grid.Column="3" Grid.Row="0" Margin="2">Show extra</CheckBox>
+            <CheckBox Grid.Column="0" Grid.Row="0" Margin="2" IsChecked="{Binding Missing}" Checked="Refresh">Show missing</CheckBox>
+            <CheckBox Grid.Column="1" Grid.Row="0" Margin="2" IsChecked="{Binding Correct}" Checked="Refresh">Show correct</CheckBox>
+            <CheckBox Grid.Column="2" Grid.Row="0" Margin="2" IsChecked="{Binding Incorrect}" Checked="Refresh">Show incorrect</CheckBox>
+            <CheckBox Grid.Column="3" Grid.Row="0" Margin="2" IsChecked="{Binding Extra}" Checked="Refresh">Show extra</CheckBox>
         </Grid>
-
-        <ListView Grid.Column="0" Grid.Row="2">
+        
+        <ListView Grid.Column="0" Grid.Row="2" ItemsSource="{Binding EntriesView}">
             <ListView.View>
-                <GridView>
+               <GridView>
                     <GridViewColumn Width="Auto">
                         <GridViewColumnHeader>Name</GridViewColumnHeader>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type local:Entry}">
+                                <TextBlock Text="{Binding FilenameL}" Visibility="{Binding LeftVisible}" Foreground="{Binding Color}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto">
                         <GridViewColumnHeader>Size</GridViewColumnHeader>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type local:Entry}">
+                                <TextBlock Text="{Binding SizeL}" Visibility="{Binding LeftVisible}" Foreground="{Binding Color}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto">
                         <GridViewColumnHeader>Date</GridViewColumnHeader>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type local:Entry}">
+                                <TextBlock Text="{Binding LastWriteL}" Visibility="{Binding LeftVisible}" Foreground="{Binding Color}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto">
                         <GridViewColumnHeader>&lt;=&gt;</GridViewColumnHeader>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type local:Entry}">
+                                <TextBlock Text="{Binding Eq}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto">
                         <GridViewColumnHeader>Date</GridViewColumnHeader>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type local:Entry}">
+                                <TextBlock Text="{Binding LastWriteR}" Visibility="{Binding RightVisible}" Foreground="{Binding Color}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto">
                         <GridViewColumnHeader>Size</GridViewColumnHeader>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type local:Entry}">
+                                <TextBlock Text="{Binding SizeR}" Visibility="{Binding RightVisible}" Foreground="{Binding Color}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto">
                         <GridViewColumnHeader>Name</GridViewColumnHeader>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type local:Entry}">
+                                <TextBlock Text="{Binding FilenameR}" Visibility="{Binding RightVisible}" Foreground="{Binding Color}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
