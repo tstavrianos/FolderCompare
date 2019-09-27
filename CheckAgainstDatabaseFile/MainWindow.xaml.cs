@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using System.Windows;
 using System.Windows.Data;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using Standart.Hash.xxHash;
 // ReSharper disable AccessToDisposedClosure
@@ -76,8 +75,8 @@ namespace CheckAgainstDatabaseFile
             public ulong? HashR { get; }
         }
 
-        private string _selectedFolder;
-        private string _selectedFile;
+        public string SelectedDirectory { get; set; }
+        public string SelectedFile{ get; set; }
         private AsyncObservableCollection<Entry> Entries { get; }
         public ICollectionView<Entry> EntriesView { get; set; }
         private ConcurrentDictionary<string, DbEntry> _database;
@@ -158,24 +157,6 @@ namespace CheckAgainstDatabaseFile
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        private void BrowseFolder(object sender, RoutedEventArgs e)
-        {
-            using (var d = new WPFFolderBrowser.WpfFolderBrowserDialog("Select Folder"))
-            {
-                if (d.ShowDialog(this) != true) return;
-                this._selectedFolder = d.FileName;
-                this.SelectedFolder.Dispatcher.Invoke(() => this.SelectedFolder.Text = d.FileName);
-            }
-        }
-
-        private void BrowseFile(object sender, RoutedEventArgs e)
-        {
-            var d = new OpenFileDialog();
-            if (d.ShowDialog(this) != true) return;
-            this._selectedFile = d.FileName;
-            this.SelectedFile.Dispatcher.Invoke(() => this.SelectedFile.Text = d.FileName);
-        }
         
         private void Refresh(object sender, RoutedEventArgs e)
         {
@@ -184,13 +165,13 @@ namespace CheckAgainstDatabaseFile
 
         private async void Check(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(this._selectedFile) || string.IsNullOrEmpty(this._selectedFolder) ||
-                !Directory.Exists(this._selectedFolder) || !File.Exists(this._selectedFile)) return;
+            if (string.IsNullOrEmpty(this.SelectedFile) || string.IsNullOrEmpty(this.SelectedDirectory) ||
+                !Directory.Exists(this.SelectedDirectory) || !File.Exists(this.SelectedFile)) return;
             this.ControlsEnabled = false;
             this.Entries.Clear();
-            _database = JsonConvert.DeserializeObject<ConcurrentDictionary<string, DbEntry>>(File.ReadAllText(this._selectedFile));
+            _database = JsonConvert.DeserializeObject<ConcurrentDictionary<string, DbEntry>>(File.ReadAllText(this.SelectedFile));
             var getFilesBlock = new TransformBlock<FileInfo, SourceFile>(file =>
-                new SourceFile(file.FullName.Remove(0, this._selectedFolder.Length),
+                new SourceFile(file.FullName.Remove(0, this.SelectedDirectory.Length),
                     file.OpenRead(), file.LastWriteTimeUtc)); //Only lets one thread do this at a time.
 
             var checkFilesBlock = new TransformBlock<SourceFile, TargetFile>(CheckFile,
@@ -209,7 +190,7 @@ namespace CheckAgainstDatabaseFile
             getFilesBlock.LinkTo(checkFilesBlock, new DataflowLinkOptions { PropagateCompletion = true });
             checkFilesBlock.LinkTo(writeCheckedFiles, new DataflowLinkOptions { PropagateCompletion = true });
 
-            var di = new DirectoryInfo(this._selectedFolder);
+            var di = new DirectoryInfo(this.SelectedDirectory);
             foreach (var filePath in di.EnumerateFiles("*", SearchOption.AllDirectories))
             {
                 await getFilesBlock.SendAsync(filePath).ConfigureAwait(false);

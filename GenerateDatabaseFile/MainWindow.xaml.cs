@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using System.Windows;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using Standart.Hash.xxHash;
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -20,6 +19,8 @@ namespace GenerateDatabaseFile
     /// </summary>
     public sealed partial class MainWindow : INotifyPropertyChanged
     {
+        public string SelectedDirectory { get; set; }
+        public string SelectedFile { get; set; }
         private readonly ConcurrentDictionary<string, DbEntry> _database = new ConcurrentDictionary<string, DbEntry>();
 
         private sealed class DbEntry
@@ -68,14 +69,11 @@ namespace GenerateDatabaseFile
             public DateTime LastWrite { get; }
         }
 
-        private string _selectedFolder;
-        private string _selectedFile;
-
-        private int _textLength;
+        private int _filesFound;
         public int FilesFound
         {
-            get => this._textLength;
-            set => this._UpdateField(ref this._textLength, value);
+            get => this._filesFound;
+            set => this._UpdateField(ref this._filesFound, value);
         }
 
         private bool _controlsEnabled = true;
@@ -97,33 +95,15 @@ namespace GenerateDatabaseFile
             this.InitializeComponent();
         }
 
-        private void BrowseFolder()
-        {
-            using (var d = new WPFFolderBrowser.WpfFolderBrowserDialog("Select Folder"))
-            {
-                if (d.ShowDialog(this) != true) return;
-                this._selectedFolder = d.FileName;
-                this.SelectedFolder.Dispatcher?.Invoke(() => this.SelectedFolder.Text = d.FileName);
-            }
-        }
-
-        private void BrowseFile()
-        {
-            var d = new SaveFileDialog();
-            if (d.ShowDialog(this) != true) return;
-            this._selectedFile = d.FileName;
-            this.SelectedFile.Dispatcher?.Invoke(() => this.SelectedFile.Text = d.FileName);
-        }
-
         private async Task Generate()
         {
-            if (string.IsNullOrEmpty(this._selectedFile) || string.IsNullOrEmpty(this._selectedFolder) ||
-                !Directory.Exists(this._selectedFolder)) return;
+            if (string.IsNullOrEmpty(this.SelectedFile) || string.IsNullOrEmpty(this.SelectedDirectory) ||
+                !Directory.Exists(this.SelectedDirectory)) return;
             this.FilesFound = 0;
             this.ControlsEnabled = false;
 
             var getFilesBlock = new TransformBlock<FileInfo, SourceFile>(file =>
-                new SourceFile(file.FullName.Remove(0, this._selectedFolder.Length),
+                new SourceFile(file.FullName.Remove(0, this.SelectedDirectory.Length),
                     file.OpenRead(), file.LastWriteTimeUtc)); //Only lets one thread do this at a time.
 
             var hashFilesBlock = new TransformBlock<SourceFile, TargetFile>(this.HashFile,
@@ -142,7 +122,7 @@ namespace GenerateDatabaseFile
             getFilesBlock.LinkTo(hashFilesBlock, new DataflowLinkOptions { PropagateCompletion = true });
             hashFilesBlock.LinkTo(writeHashedFiles, new DataflowLinkOptions { PropagateCompletion = true });
 
-            var di = new DirectoryInfo(this._selectedFolder);
+            var di = new DirectoryInfo(this.SelectedDirectory);
             foreach (var filePath in di.EnumerateFiles("*", SearchOption.AllDirectories))
             {
                 await getFilesBlock.SendAsync(filePath).ConfigureAwait(false);
@@ -151,7 +131,7 @@ namespace GenerateDatabaseFile
             getFilesBlock.Complete();
             await writeHashedFiles.Completion.ConfigureAwait(false);
             var output = JsonConvert.SerializeObject(this._database, Formatting.Indented);
-            File.WriteAllText(this._selectedFile, output);
+            File.WriteAllText(this.SelectedFile, output);
 
             this.ControlsEnabled = true;
         }
@@ -186,17 +166,6 @@ namespace GenerateDatabaseFile
         {
             this.FilesFound++;
             this._database.TryAdd(arg.FilePath, new DbEntry(arg.LastWrite, arg.Hash, arg.Size));
-        }
-
-
-        private void BrowseFolderCommand(object sender, RoutedEventArgs e)
-        {
-            this.BrowseFolder();
-        }
-
-        private void BrowseFileCommand(object sender, RoutedEventArgs e)
-        {
-            this.BrowseFile();
         }
 
         private async void GenerateCommand(object sender, RoutedEventArgs e)

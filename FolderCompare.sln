@@ -6,8 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateDatabaseFile", "Gen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckAgainstDatabaseFile", "CheckAgainstDatabaseFile\CheckAgainstDatabaseFile.csproj", "{D5F4C53A-C601-4A23-9604-44FB31129A58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFFolderBrowser", "WPFFolderBrowser\WPFFolderBrowser.csproj", "{35E2F147-93EF-496B-B6B8-F716D62FD676}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|x64 = Release|x64
@@ -26,9 +24,5 @@ Global
 		{D5F4C53A-C601-4A23-9604-44FB31129A58}.Release|x64.Build.0 = Release|Any CPU
 		{D5F4C53A-C601-4A23-9604-44FB31129A58}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{D5F4C53A-C601-4A23-9604-44FB31129A58}.Debug|x64.Build.0 = Debug|Any CPU
-		{35E2F147-93EF-496B-B6B8-F716D62FD676}.Release|x64.ActiveCfg = Release|Any CPU
-		{35E2F147-93EF-496B-B6B8-F716D62FD676}.Release|x64.Build.0 = Release|Any CPU
-		{35E2F147-93EF-496B-B6B8-F716D62FD676}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{35E2F147-93EF-496B-B6B8-F716D62FD676}.Debug|x64.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal
