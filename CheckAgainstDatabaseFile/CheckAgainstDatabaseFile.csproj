@@ -106,13 +106,16 @@
     <Compile Include="AsyncContext.cs" />
     <Compile Include="AsyncObservableCollection.cs" />
     <Compile Include="Entry.cs" />
+    <Compile Include="GridViewSort.cs" />
     <Compile Include="IAsyncContext.cs" />
+    <Compile Include="ICollectionView.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyCollectionViewGeneric.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

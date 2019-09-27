@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using WPFFolderBrowser.Interop;
+// ReSharper disable MemberCanBeMadeStatic.Local
 
 namespace WPFFolderBrowser
 {
@@ -423,9 +424,7 @@ namespace WPFFolderBrowser
 
         private IntPtr GetHandleFromWindow(Window window)
         {
-            if (window == null)
-                return NativeMethods.NO_PARENT;
-            return (new WindowInteropHelper(window)).Handle;
+            return window == null ? NativeMethods.NO_PARENT : (new WindowInteropHelper(window)).Handle;
         }
 
         private bool IsOptionSet(IFileDialog dialog, NativeMethods.FOS flag)

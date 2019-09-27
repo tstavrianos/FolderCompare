@@ -2,6 +2,8 @@
 
 using System;
 using System.Runtime.InteropServices;
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+#pragma warning disable 649
 
 namespace WPFFolderBrowser.Interop
 {
@@ -273,7 +275,7 @@ namespace WPFFolderBrowser.Interop
         internal enum FDAP
         {
             FDAP_BOTTOM = 0x00000000,
-            FDAP_TOP = 0x00000001,
+            FDAP_TOP = 0x00000001
         }
 
         // wpffb used
@@ -296,7 +298,7 @@ namespace WPFFolderBrowser.Interop
         {
             SIATTRIBFLAGS_AND = 0x00000001, // if multiple items and the attirbutes together.
             SIATTRIBFLAGS_OR = 0x00000002, // if multiple items or the attributes together.
-            SIATTRIBFLAGS_APPCOMPAT = 0x00000003, // Call GetAttributes directly on the ShellFolder for multiple attributes
+            SIATTRIBFLAGS_APPCOMPAT = 0x00000003 // Call GetAttributes directly on the ShellFolder for multiple attributes
         }
 
         // wpffb used
@@ -397,7 +399,7 @@ namespace WPFFolderBrowser.Interop
         {
             KFDF_PERSONALIZE = 0x00000001,
             KFDF_LOCAL_REDIRECT_ONLY = 0x00000002,
-            KFDF_ROAMABLE = 0x00000004,
+            KFDF_ROAMABLE = 0x00000004
         }
 
 
@@ -424,7 +426,7 @@ namespace WPFFolderBrowser.Interop
             ACTCTX_FLAG_APPLICATION_NAME_VALID = 0x00000020,
             ACTCTX_FLAG_SOURCE_IS_ASSEMBLYREF = 0x00000040,
             ACTCTX_FLAG_HMODULE_VALID = 0x00000080,
-            ACTCTX_FLAG_OVERRIDEMANIFEST_VALID = 0x00000100,
+            ACTCTX_FLAG_OVERRIDEMANIFEST_VALID = 0x00000100
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
@@ -498,7 +500,7 @@ namespace WPFFolderBrowser.Interop
         {
             public int cx;
             public int cy;
-        };
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
@@ -507,7 +509,7 @@ namespace WPFFolderBrowser.Interop
             internal int top;
             internal int right;
             internal int bottom;
-        };
+        }
 
 
         [StructLayout(LayoutKind.Sequential)]
@@ -519,7 +521,7 @@ namespace WPFFolderBrowser.Interop
             internal byte opacity;
             internal bool fVisible;
             internal bool fSourceClientAreaOnly;
-        };
+        }
 
 
         internal const int DWMNCRP_USEWINDOWSTYLE = 0;  // Enable/disable non-client rendering based on window style
@@ -535,7 +537,7 @@ namespace WPFFolderBrowser.Interop
         {
             internal uint uiNumerator;
             internal uint uiDenominator;
-        };
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct DWM_PRESENT_PARAMETERS
@@ -546,7 +548,7 @@ namespace WPFFolderBrowser.Interop
             internal uint cBuffer;
             internal bool fUseSourceRate;
             internal UNSIGNED_RATIO uiNumerator;
-        };
+        }
 
 
         [StructLayout(LayoutKind.Explicit)]
@@ -593,7 +595,7 @@ namespace WPFFolderBrowser.Interop
             internal ulong cFramesMissed;      // number of times an old frame was composed 
             // when a new frame should have been used
             // but was not available
-        };
+        }
 
 
         internal const int DWM_BB_ENABLE = 0x00000001;  // fEnable has been specified
@@ -607,7 +609,7 @@ namespace WPFFolderBrowser.Interop
             public bool fEnable;
             public IntPtr hRgnBlur;
             public bool fTransitionOnMaximized;
-        };
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct MARGINS
@@ -616,7 +618,7 @@ namespace WPFFolderBrowser.Interop
             public int cxRightWidth;     // width of right border that retains its size
             public int cyTopHeight;      // height of top border that retains its size
             public int cyBottomHeight;   // height of bottom border that retains its size
-        };
+        }
 
 
         #endregion

@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 
 namespace CheckAgainstDatabaseFile
 {
-    public class Entry
+    public sealed class Entry
     {
         public string FilenameL { get; }
         public string FilenameR{ get; }
@@ -37,24 +34,24 @@ namespace CheckAgainstDatabaseFile
         {
             get
             {
-                if (FilenameL != null && FilenameR == null)
+                if (this.FilenameL != null && this.FilenameR == null)
                 {
                     return "=>";
                 }
-                if (FilenameL == null && FilenameR != null)
+                if (this.FilenameL == null && this.FilenameR != null)
                 {
                     return "<=";
                 }
 
-                if (FilenameL != null && FilenameR != null && SizeL != SizeR)
+                if (this.FilenameL != null && this.FilenameR != null && this.SizeL != this.SizeR)
                 {
                     return "!=";
                 }
-                if (FilenameL != null && FilenameR != null && LastWriteL != LastWriteR)
+                if (this.FilenameL != null && this.FilenameR != null && this.LastWriteL != this.LastWriteR)
                 {
                     return "!=";
                 }
-                if (FilenameL != null && FilenameR != null && HashL != HashR)
+                if (this.FilenameL != null && this.FilenameR != null && this.HashL != this.HashR)
                 {
                     return "!=";
                 }
@@ -67,10 +64,17 @@ namespace CheckAgainstDatabaseFile
         {
             get
             {
-                if (this.Eq == "=>") return new SolidColorBrush(Colors.DarkGreen);
-                if (this.Eq == "<=") return new SolidColorBrush(Colors.DarkBlue);
-                if (this.Eq == "!=") return new SolidColorBrush(Colors.Red);
-                return new SolidColorBrush(Colors.Black);
+                switch (this.Eq)
+                {
+                    case "=>":
+                        return new SolidColorBrush(Colors.DarkGreen);
+                    case "<=":
+                        return new SolidColorBrush(Colors.DarkBlue);
+                    case "!=":
+                        return new SolidColorBrush(Colors.Red);
+                    default:
+                        return new SolidColorBrush(Colors.Black);
+                }
             }
         }
 

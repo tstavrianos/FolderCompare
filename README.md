@@ -22,3 +22,4 @@ Future:
 Credits:
 * [Scott Chamberlain](https://stackoverflow.com/users/80274/scott-chamberlain) for this [answer](https://stackoverflow.com/a/46516878). 
 * [uranium62](https://github.com/uranium62) for his xxHash [implementation](https://github.com/uranium62/xxHash#).
+* [zezba9000](https://github.com/zezba9000) for [WPF-Folder-Browser](https://github.com/zezba9000/WPF-Folder-Browser).

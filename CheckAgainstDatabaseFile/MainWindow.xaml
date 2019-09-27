@@ -54,10 +54,12 @@
             <CheckBox Grid.Column="3" Grid.Row="0" Margin="2" IsChecked="{Binding Extra}" Checked="Refresh">Show extra</CheckBox>
         </Grid>
         
-        <ListView Grid.Column="0" Grid.Row="2" ItemsSource="{Binding EntriesView}">
+        <ListView Grid.Column="0" Grid.Row="2" ItemsSource="{Binding EntriesView}"
+                  IsSynchronizedWithCurrentItem="True"
+                  local:GridViewSort.AutoSort="True">
             <ListView.View>
                <GridView>
-                    <GridViewColumn Width="Auto">
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding FilenameL}" local:GridViewSort.PropertyName="FilenameL">
                         <GridViewColumnHeader>Name</GridViewColumnHeader>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type local:Entry}">
@@ -65,15 +67,15 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto">
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding SizeL}" local:GridViewSort.PropertyName="SizeL">
                         <GridViewColumnHeader>Size</GridViewColumnHeader>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type local:Entry}">
-                                <TextBlock Text="{Binding SizeL}" Visibility="{Binding LeftVisible}" Foreground="{Binding Color}"/>
+                                <TextBlock Text="{Binding SizeL}" Visibility="{Binding LeftVisible}" Foreground="{Binding LeftVisible}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto">
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding LastWriteL}" local:GridViewSort.PropertyName="LastWriteL">
                         <GridViewColumnHeader>Date</GridViewColumnHeader>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type local:Entry}">
@@ -81,7 +83,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto">
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Eq}" local:GridViewSort.PropertyName="Eq">
                         <GridViewColumnHeader>&lt;=&gt;</GridViewColumnHeader>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type local:Entry}">
@@ -89,7 +91,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto">
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding LastWriteR}" local:GridViewSort.PropertyName="LastWriteR">
                         <GridViewColumnHeader>Date</GridViewColumnHeader>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type local:Entry}">
@@ -97,7 +99,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto">
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding SizeR}" local:GridViewSort.PropertyName="SizeR">
                         <GridViewColumnHeader>Size</GridViewColumnHeader>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type local:Entry}">
@@ -105,7 +107,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto">
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding FilenameR}" local:GridViewSort.PropertyName="FilenameR">
                         <GridViewColumnHeader>Name</GridViewColumnHeader>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type local:Entry}">

@@ -1,6 +1,7 @@
 // ReSharper disable InconsistentNaming
 
 using System.Runtime.InteropServices;
+// ReSharper disable ClassCanBeSealed.Global
 
 namespace WPFFolderBrowser.Interop
 {

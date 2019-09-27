@@ -7,27 +7,28 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using System.Windows;
-using System.Windows.Input;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using Standart.Hash.xxHash;
+// ReSharper disable UnusedAutoPropertyAccessor.Local
+// ReSharper disable AccessToDisposedClosure
 
 namespace GenerateDatabaseFile
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : INotifyPropertyChanged
+    public sealed partial class MainWindow : INotifyPropertyChanged
     {
-        private readonly ConcurrentDictionary<string, DBEntry> _database = new ConcurrentDictionary<string, DBEntry>();
+        private readonly ConcurrentDictionary<string, DbEntry> _database = new ConcurrentDictionary<string, DbEntry>();
 
-        private class DBEntry
+        private sealed class DbEntry
         {
             public DateTime LastWrite { get; }
             public ulong Hash { get; }
             public long Size { get; }
 
-            public DBEntry(DateTime lastWrite, ulong hash, long size)
+            public DbEntry(DateTime lastWrite, ulong hash, long size)
             {
                 this.LastWrite = lastWrite;
                 this.Hash = hash;
@@ -145,7 +146,6 @@ namespace GenerateDatabaseFile
             foreach (var filePath in di.EnumerateFiles("*", SearchOption.AllDirectories))
             {
                 await getFilesBlock.SendAsync(filePath).ConfigureAwait(false);
-                //getFilesBlock.Post(filePath);
             }
 
             getFilesBlock.Complete();
@@ -158,23 +158,14 @@ namespace GenerateDatabaseFile
 
         private void _UpdateField<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
         {
-            if (!EqualityComparer<T>.Default.Equals(field, newValue))
-            {
-                field = newValue;
-                this._OnPropertyChanged(propertyName);
-            }
+            if (EqualityComparer<T>.Default.Equals(field, newValue)) return;
+            field = newValue;
+            this._OnPropertyChanged(propertyName);
         }
 
         private void _OnPropertyChanged(string propertyName)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-            /*switch (propertyName)
-            {
-                // you can add "case nameof(...):" cases here to handle
-                // specific property changes, rather than polluting the
-                // property setters themselves
-            }*/
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -194,23 +185,23 @@ namespace GenerateDatabaseFile
         private void WriteHashedFile(TargetFile arg)
         {
             this.FilesFound++;
-            this._database.TryAdd(arg.FilePath, new DBEntry(arg.LastWrite, arg.Hash, arg.Size));
+            this._database.TryAdd(arg.FilePath, new DbEntry(arg.LastWrite, arg.Hash, arg.Size));
         }
 
 
         private void BrowseFolderCommand(object sender, RoutedEventArgs e)
         {
-            BrowseFolder();
+            this.BrowseFolder();
         }
 
         private void BrowseFileCommand(object sender, RoutedEventArgs e)
         {
-            BrowseFile();
+            this.BrowseFile();
         }
 
         private async void GenerateCommand(object sender, RoutedEventArgs e)
         {
-            await Generate();
+            await this.Generate();
         }
     }
 }

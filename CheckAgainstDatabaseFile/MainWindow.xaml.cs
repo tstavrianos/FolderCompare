@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -11,6 +12,7 @@ using System.Windows.Data;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using Standart.Hash.xxHash;
+// ReSharper disable AccessToDisposedClosure
 
 namespace CheckAgainstDatabaseFile
 {
@@ -19,13 +21,13 @@ namespace CheckAgainstDatabaseFile
     /// </summary>
     public sealed partial class MainWindow: INotifyPropertyChanged
     {
-        private class DBEntry
+        private sealed class DbEntry
         {
             public DateTime LastWrite { get; }
             public ulong Hash { get; }
             public long Size { get; }
 
-            public DBEntry(DateTime lastWrite, ulong hash, long size)
+            public DbEntry(DateTime lastWrite, ulong hash, long size)
             {
                 this.LastWrite = lastWrite;
                 this.Hash = hash;
@@ -73,30 +75,12 @@ namespace CheckAgainstDatabaseFile
             public long? SizeR { get; }
             public ulong? HashR { get; }
         }
-        
-        private sealed class CheckedFile
-        {
-            public CheckedFile(string filePath, string message, ulong hash, long size)
-            {
-                this.FilePath = filePath;
-                this.Message = message;
-                this.Hash = hash;
-                this.Size = size;
-            }
 
-            public string FilePath { get; }
-            public string Message { get; }
-            public ulong Hash { get; }
-            public long Size { get; }
-        }
-
-        
         private string _selectedFolder;
         private string _selectedFile;
-        private AsyncObservableCollection<Entry> Entries { get; set; }
-        public ICollectionView EntriesView { get; set; }
-        private ConcurrentDictionary<string, DBEntry> _database;
-
+        private AsyncObservableCollection<Entry> Entries { get; }
+        public ICollectionView<Entry> EntriesView { get; set; }
+        private ConcurrentDictionary<string, DbEntry> _database;
 
         private bool? _hashFiles = false;
         public bool? HashFiles
@@ -147,7 +131,7 @@ namespace CheckAgainstDatabaseFile
         {
             this.Entries = new AsyncObservableCollection<Entry>();
 
-            this.EntriesView = CollectionViewSource.GetDefaultView(this.Entries);
+            this.EntriesView = new MyCollectionViewGeneric<Entry>(CollectionViewSource.GetDefaultView(this.Entries));
             this.EntriesView.Filter = this.EntryFilter;
 
             this.InitializeComponent();
@@ -160,17 +144,14 @@ namespace CheckAgainstDatabaseFile
             if (this._missing == true && e.Eq == "=>") return true;
             if (this._extra == true && e.Eq == "<=") return true;
             if (this._incorrect == true && e.Eq == "!=") return true;
-            if (this._correct == true && e.Eq == "=") return true;
-            return false;
+            return this._correct == true && e.Eq == "=";
         }
         
         private void _UpdateField<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
         {
-            if (!EqualityComparer<T>.Default.Equals(field, newValue))
-            {
-                field = newValue;
-                this._OnPropertyChanged(propertyName);
-            }
+            if (EqualityComparer<T>.Default.Equals(field, newValue)) return;
+            field = newValue;
+            this._OnPropertyChanged(propertyName);
         }
         
         private void _OnPropertyChanged(string propertyName)
@@ -207,7 +188,7 @@ namespace CheckAgainstDatabaseFile
                 !Directory.Exists(this._selectedFolder) || !File.Exists(this._selectedFile)) return;
             this.ControlsEnabled = false;
             this.Entries.Clear();
-            _database = JsonConvert.DeserializeObject<ConcurrentDictionary<string, DBEntry>>(File.ReadAllText(this._selectedFile));
+            _database = JsonConvert.DeserializeObject<ConcurrentDictionary<string, DbEntry>>(File.ReadAllText(this._selectedFile));
             var getFilesBlock = new TransformBlock<FileInfo, SourceFile>(file =>
                 new SourceFile(file.FullName.Remove(0, this._selectedFolder.Length),
                     file.OpenRead(), file.LastWriteTimeUtc)); //Only lets one thread do this at a time.
@@ -237,9 +218,8 @@ namespace CheckAgainstDatabaseFile
             getFilesBlock.Complete();
             await writeCheckedFiles.Completion.ConfigureAwait(false);
 
-            foreach (var kv in this._database)
+            foreach (var e1 in this._database.Select(kv => new Entry(kv.Key, null, kv.Value.Size, null, kv.Value.LastWrite, null, kv.Value.Hash, null)))
             {
-                var e1= new Entry(kv.Key, null, kv.Value.Size, null, kv.Value.LastWrite, null, kv.Value.Hash, null);
                 this.Entries.Add(e1);
             }
 
