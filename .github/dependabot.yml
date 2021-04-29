@@ -1,0 +1,39 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 99
+  ignore:
+  - dependency-name: Costura.Fody
+    versions:
+    - 5.0.2
+    - 5.1.0
+    - 5.2.0
+  - dependency-name: Orc.Controls
+    versions:
+    - 4.2.10
+    - 4.2.3
+    - 4.2.5
+    - 4.2.6
+    - 4.2.7
+    - 4.2.8
+    - 4.2.9
+  - dependency-name: Fody
+    versions:
+    - 6.3.0
+    - 6.4.0
+    - 6.5.0
+  - dependency-name: Catel.Core
+    versions:
+    - 5.12.11
+    - 5.12.12
+  - dependency-name: Catel.MVVM
+    versions:
+    - 5.12.11
+    - 5.12.12
+  - dependency-name: Orc.FileSystem
+    versions:
+    - 4.1.2
+    - 4.1.3
